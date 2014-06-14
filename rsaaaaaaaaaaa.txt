@@ -1,0 +1,96 @@
+RSA algorithm in C
+
+Posted by mohammedmoulana on March 28, 2012
+
+The RSA algorithm was invented by Ronald L. Rivest, Adi Shamir, and Leonard Adleman in 1977 and released into the public domain on September 6, 2000.
+This an example of how a public and private ke...
+
+This an example of how a public and private key is used in the encryption process. (Photo credit: Wikipedia)
+
+Public-key systems–or asymmetric cryptography–use two different keys with a mathematical relationship to each other. Their protection relies on the premise that knowing one key will not help you figure out the other. The RSA algorithm uses the fact that it’s easy to multiply two large prime numbers together and get a product. But you can’t take that product and reasonably guess the two original numbers, or guess one of the original primes if only the other is known. The public key and private keys are carefully generated using the RSA algorithm; they can be used to encrypt information or sign it.
+ Key generation
+1) Pick two large prime numbers p and q, p != q;
+2) Calculate n = p × q;
+3) Calculate ø (n) = (p - 1)(q - 1);
+4) Pick e, so that gcd(e, ø (n)) = 1, 1 < e <  ø (n);
+5) Calculate d, so that d · e mod ø (n) = 1, i.e., d is the multiplicative inverse of e in mod  ø (n);
+6) Get public key as KU = {e, n};
+7) Get private key as KR = {d, n}.
+Encryption
+For plaintext block P < n, its ciphertext C = P^e (mod n).
+Decryption
+For ciphertext block C, its plaintext is P = C^d (mod n).
+
+/* C program for the Implementation Of RSA Algorithm Encrypt the text data and Decrypt the same */
+
+#include<stdio.h>
+#include<conio.h>
+
+int phi,M,n,e,d,C,FLAG;
+
+int check()
+{
+int i;
+for(i=3;e%i==0 && phi%i==0;i+2)
+{
+FLAG = 1;
+return;
+}
+FLAG = 0;
+}
+
+void encrypt()
+{
+int i;
+C = 1;
+for(i=0;i< e;i++)
+C=C*M%n;
+C = C%n;
+printf(“\n\tEncrypted keyword : %d”,C);
+}
+
+void decrypt()
+{
+int i;
+M = 1;
+for(i=0;i< d;i++)
+M=M*C%n;
+M = M%n;
+printf(“\n\tDecrypted keyword : %d”,M);
+}
+
+void main()
+{
+int p,q,s;
+clrscr();
+printf(“Enter Two Relatively Prime Numbers\t: “);
+scanf(“%d%d”,&p,&q);
+n = p*q;
+phi=(p-1)*(q-1);
+printf(“\n\tF(n) phi value\t= %d”,phi);
+do
+{
+printf(“\n\nEnter e which is prime number and less than phi \t: “,n);
+scanf(“%d”,&e);
+check();
+}while(FLAG==1);
+d = 1;
+do
+{
+s = (d*e)%phi;
+d++;
+}while(s!=1);
+d = d-1;
+printf(“\n\tPublic Key\t: {%d,%d}”,e,n);
+printf(“\n\tPrivate Key\t: {%d,%d}”,d,n);
+printf(“\n\nEnter The Plain Text\t: “);
+scanf(“%d”,&M);
+encrypt();
+printf(“\n\nEnter the Cipher text\t: “);
+scanf(“%d”,&C);
+decrypt();
+getch();
+}
+About these ads
+.
+. 
